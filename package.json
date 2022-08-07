@@ -1,0 +1,22 @@
+{
+  "name": "ls",
+  "version": "1.0.0",
+  "description": "a rough promise",
+  "main": "promise-practice.js",
+  "scripts": {
+    "test": "promises-aplus-tests promise-practice"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/stul-5230/promise-practice.git"
+  },
+  "author": "stul-5230",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/stul-5230/promise-practice/issues"
+  },
+  "homepage": "https://github.com/stul-5230/promise-practice#readme",
+  "dependencies": {
+    "promises-aplus-tests": "^2.1.2"
+  }
+}
