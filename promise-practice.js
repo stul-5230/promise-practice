@@ -78,11 +78,7 @@ class Resolver {
     _resolve = (value) => {
         if (this._status === 'pending') {
             this._status = 'accepted'
-            this._value = value 
-            // this._value 有什么用
-            // 同步时，通过 addCallback 调用 unwrap，会用这个 value
-            // 为什么不直接用 result ？
-            // 因为 value 可能是一个 promise，要执行 unwrap 之后，拿到的值才算得上是一个 result
+            this._value = value
 
             if (this._callbacks && this._callbacks.length !== 0 ||
                 this._errbacks && this._errbacks.length !== 0) {
@@ -98,8 +94,6 @@ class Resolver {
             this._result = reason
         }
 
-        // 下面的 if 不能放在上面那个if里，有可能是 rejected 状态被调用的。
-        // 在 _addCallback 有可能会调用到这里来， _status === rejected
         if (this._status === 'rejected') {
             this._notify(this._errbacks, this._result)
             this._errbacks = []
@@ -158,7 +152,6 @@ class Resolver {
 
     _notify = (callbacks, value) => {
         if (callbacks && callbacks.length !== 0) {
-            // 为什么要用 async
             PromiseA.async(function() {
                 for (let i in callbacks) {
                     callbacks[i](value)
@@ -176,8 +169,6 @@ class Resolver {
             this._errbacks.push(errback)
         }
 
-        // 为什么有这段代码
-        // reject => then 的时候，会将 then 的 errorback 加入。如果没这段代码，不会执行 errorback 了
         switch (this._status) {
             case 'accepted':
                 this._unwrap(this._value)
@@ -191,29 +182,6 @@ class Resolver {
         }
     }
 
-}
-
-
-function beginTest () {
-
-    const p1 = new PromiseA((resolve, reject) => {
-        resolve(1)
-    })
-    p1
-    .then(() => {
-        return Object.create(Object.prototype, {
-            then: {
-                get: function () {
-                    throw e;
-                }
-            }
-        })
-    })
-    .then((v) => {
-        debugger
-    }, (r) => {
-        debugger
-    })
 }
 
 let MyPromiseA = {};
